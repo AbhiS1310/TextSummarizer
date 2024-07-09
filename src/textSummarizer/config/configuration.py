@@ -1,7 +1,7 @@
 import os
 from textSummarizer.constants import *
 from textSummarizer.utils.common import (read_yaml,create_directories)
-from textSummarizer.entity import  DataIngestionConfig,DataValidationConfig,DataTransformationConfig,ModelTrainerConfig
+from textSummarizer.entity import  DataIngestionConfig,DataValidationConfig,DataTransformationConfig,ModelTrainerConfig,ModelEvaluationConfig
 
 class ConfigurationManager:
     def __init__(self,config_filepath = CONFIG_FILE_PATH,params_filepath= PARAMS_FILE_PATH):
@@ -52,4 +52,16 @@ class ConfigurationManager:
                                                   params.gradient_accumulation_steps)
         
         return model_trainer_config
+    
+    def get_model_evaluation_config(self)->ModelEvaluationConfig:
+        config = self.config.model_evaluation
+        create_directories([config.root_dir])
+        model_evaluation_config = ModelEvaluationConfig(config.root_dir,
+                                                        config.data_path,
+                                                        config.model_path,
+                                                        config.tokenizer_path,
+                                                        config.metric_file_name)
+        
+        return model_evaluation_config
+    
     
